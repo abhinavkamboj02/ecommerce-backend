@@ -1,0 +1,111 @@
+package com.device.bazzar.controllers;
+
+import com.device.bazzar.dtos.ImageResponse;
+import com.device.bazzar.dtos.PageableResponse;
+import com.device.bazzar.services.ProductService;
+import com.device.bazzar.dtos.ProductDto;
+import com.device.bazzar.services.FileService;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.util.StreamUtils;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
+
+@RestController
+@RequestMapping("/product")
+public class ProductController {
+    @Autowired
+   private ProductService productService;
+    @Autowired
+    private FileService fileService;
+    @Value("${product.image.path}")
+    private String path;
+
+    //create
+    @PostMapping
+    ResponseEntity<ProductDto> createProduct(@RequestBody ProductDto productDto){
+        ProductDto productDto1 = productService.createProduct(productDto);
+        return new ResponseEntity<>(productDto1, HttpStatus.CREATED);
+    }
+    //update
+    @PutMapping("/{product_Id}")
+    ResponseEntity<ProductDto> updateProduct(@RequestBody ProductDto productDto, @PathVariable String product_Id){
+        ProductDto productDto1 = productService.updateProduct(productDto, product_Id);
+        return new ResponseEntity<>(productDto1, HttpStatus.OK);
+    }
+    @GetMapping("/{subTittle}")
+    ResponseEntity<List<ProductDto>> getByTittle(@PathVariable String subTittle){
+        List<ProductDto> list = productService.getByTittle(subTittle);
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+    //get all
+    @GetMapping
+    ResponseEntity<PageableResponse> getAll(@RequestParam(defaultValue = "0", required = false) int pageNumber,
+                                            @RequestParam(defaultValue = "10", required = false) int pageSize,
+                                            @RequestParam(defaultValue = "tittle", required = false) String sortBy,
+                                            @RequestParam(defaultValue = "tittle", required = false) String sortDir){
+        PageableResponse resp = productService.getAllProduct(pageNumber, pageSize, sortBy, sortDir);
+        return new ResponseEntity<>(resp,HttpStatus.OK);
+    }
+    //get islivetrue
+    @GetMapping("/islive")
+    ResponseEntity<List<ProductDto>> isLive(){
+        List<ProductDto> list = productService.getByIsLiveTrue();
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+    //delete
+    @DeleteMapping("/{product_Id}")
+    ResponseEntity<String> deleteProduct(@PathVariable String product_Id){
+        productService.deleteProduct(product_Id);
+        return new ResponseEntity<>("Deleted Successfully!!", HttpStatus.OK);
+    }
+
+    //upload image
+    @PostMapping("/image/{product_Id}")
+    ResponseEntity<ImageResponse> uploadImage(@RequestParam MultipartFile productImage, @PathVariable String product_Id) throws IOException {
+        String imageName = fileService.uploadfile(productImage, path);
+        ProductDto productDto = productService.findById(product_Id);
+        productDto.setImageName(imageName);
+        productService.updateProduct(productDto, product_Id);
+        ImageResponse imageResponse = ImageResponse.builder().imageName(imageName).message("Successfully Added!").success(true).status(HttpStatus.CREATED).build();
+        return new ResponseEntity<>(imageResponse, HttpStatus.CREATED);
+
+
+    }
+    //serve image
+    @GetMapping("/image/{product_Id}")
+    void serveUserImage(@PathVariable String product_Id, HttpServletResponse response) throws IOException {
+        ProductDto productDto = productService.findById(product_Id);
+        InputStream resource = fileService.getResource(path, productDto.getImageName());
+        response.setContentType(MediaType.IMAGE_JPEG_VALUE);
+        StreamUtils.copy(resource,response.getOutputStream());
+    }
+    @PostMapping("/category/{categoryId}")
+    ResponseEntity<ProductDto> createProductWithCategory(@RequestBody ProductDto productDto, @PathVariable  String categoryId){
+        ProductDto productDto1 = productService.createProductWithCategory(productDto, categoryId);
+        System.out.println(productDto1.toString());
+        return new ResponseEntity<>(productDto1, HttpStatus.CREATED);
+    }
+    @PutMapping("/{product_Id}/category/{categoryId}")
+    ResponseEntity<ProductDto> updateCategoryInProduct(@PathVariable String product_Id, @PathVariable String categoryId){
+        ProductDto productDto = productService.updateProductWithCategory(product_Id, categoryId);
+        return new ResponseEntity<>(productDto, HttpStatus.OK);
+    }
+    @GetMapping("/category/{categoryId}")
+    ResponseEntity<List<ProductDto>> productsWithGivenCategory(@PathVariable String categoryId){
+        List<ProductDto> list = productService.categoryWiseProducts(categoryId);
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
+
+
+
+}
