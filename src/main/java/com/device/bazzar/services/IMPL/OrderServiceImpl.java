@@ -2,6 +2,7 @@ package com.device.bazzar.services.IMPL;
 
 import com.device.bazzar.dtos.OrderDto;
 import com.device.bazzar.entities.*;
+import com.device.bazzar.exception.BadApiRequest;
 import com.device.bazzar.exception.ResourceNotFoundException;
 import com.device.bazzar.repositories.CartRepository;
 import com.device.bazzar.repositories.OrderRepository;
@@ -9,6 +10,7 @@ import com.device.bazzar.repositories.UserRepository;
 import com.device.bazzar.services.OrderService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.lang.module.ResolutionException;
 import java.util.Date;
@@ -16,7 +18,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
-
+@Service
 public class OrderServiceImpl implements OrderService {
 
     @Autowired
@@ -34,7 +36,7 @@ public class OrderServiceImpl implements OrderService {
         Cart cart = cartRepository.findById(cartId).orElseThrow(()-> new ResourceNotFoundException("No cart Found with given cart Id"));
         List<CartItems> cartItemsList = cart.getItems();
         if(cartItemsList.size()<1){
-            throw new ResourceNotFoundException("invalid cart size");
+            throw new BadApiRequest("invalid cart size");
         }
         AtomicInteger orderAmount = new AtomicInteger(0);
         List<OrderItems> orderItemsList = cartItemsList.stream().map(cartItem -> {
@@ -54,7 +56,7 @@ public class OrderServiceImpl implements OrderService {
                 .name(orderDto.getName())
                 .orderedDate(new Date())
                 .deliveredDate(orderDto.getDeliveredDate())
-                .user(orderDto.getUser())
+                .user(user)
                 .orderItemsList(orderItemsList)
                 .amount(orderAmount.intValue())
                 .build();
@@ -66,7 +68,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void deleteOrder(String orderId) {
-        Order order = orderRepository.findById(orderId).orElseThrow(()-> new ResolutionException("No Order Found"));
+        Order order = orderRepository.findById(orderId).orElseThrow(()-> new ResourceNotFoundException("No Order Found"));
         orderRepository.delete(order);
     }
 
