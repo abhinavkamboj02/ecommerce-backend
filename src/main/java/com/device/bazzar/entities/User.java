@@ -5,6 +5,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
 
 @Getter
 @Setter
@@ -13,7 +17,7 @@ import lombok.*;
 @NoArgsConstructor
 @Entity
 @Table(name = "User_Table")
-public class User {
+public class User{
     @Id
     @Column(name = "User_Id")
     private String userId;
@@ -29,7 +33,6 @@ public class User {
     private String userAbout;
     @Column(name = "User_ImageName")
     private String userImageName;
+    private String userRole;
 
-
-    
 }
