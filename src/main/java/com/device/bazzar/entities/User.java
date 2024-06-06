@@ -5,8 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.*;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+
 
 import java.util.Collection;
 
@@ -17,7 +16,7 @@ import java.util.Collection;
 @NoArgsConstructor
 @Entity
 @Table(name = "User_Table")
-public class User{
+public class User /* implements UserDetails*/{
     @Id
     @Column(name = "User_Id")
     private String userId;
@@ -35,4 +34,38 @@ public class User{
     private String userImageName;
     private String userRole;
 
+//    @Override
+//    public Collection<? extends GrantedAuthority> getAuthorities() {
+//        return null;
+//    }
+//
+//    @Override
+//    public String getPassword() {
+//        return this.userPassword;
+//    }
+//
+//    @Override
+//    public String getUsername() {
+//        return this.userEmail;
+//    }
+//
+//    @Override
+//    public boolean isAccountNonExpired() {
+//        return false;
+//    }
+//
+//    @Override
+//    public boolean isAccountNonLocked() {
+//        return false;
+//    }
+//
+//    @Override
+//    public boolean isCredentialsNonExpired() {
+//        return false;
+//    }
+//
+//    @Override
+//    public boolean isEnabled() {
+//        return true;
+//    }
 }

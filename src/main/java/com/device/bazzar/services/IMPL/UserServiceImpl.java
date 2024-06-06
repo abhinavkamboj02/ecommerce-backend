@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+//import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -32,6 +33,8 @@ public class UserServiceImpl implements UserService {
     ModelMapper modelMapper;
     @Autowired
     UserRepository userRepository;
+//    @Autowired
+//    PasswordEncoder passwordEncoder;
     @Value("${user.profile.image.path}")
     private String imagePath;
 
@@ -40,6 +43,7 @@ public class UserServiceImpl implements UserService {
         User user = modelMapper.map(userdto, User.class);
         String id = UUID.randomUUID().toString();
         user.setUserId(id);
+       // user.setUserPassword(passwordEncoder.encode(userdto.getUserPassword()));
         User savedUser = userRepository.save(user);
         UserDto savedUserDto = modelMapper.map(savedUser, UserDto.class);
         return savedUserDto;
@@ -51,7 +55,7 @@ public class UserServiceImpl implements UserService {
         user.setUserName(userDto.getUserName());
         user.setUserAbout(userDto.getUserAbout());
         user.setUserGender(userDto.getUserGender());
-        user.setUserPassword(userDto.getUserPassword());
+       // user.setUserPassword(passwordEncoder.encode(userDto.getUserPassword()));
         user.setUserImageName(userDto.getUserImageName());
         User savedUser = userRepository.save(user);
         UserDto savedUserDto = modelMapper.map(savedUser, UserDto.class);
