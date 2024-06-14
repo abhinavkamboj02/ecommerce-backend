@@ -33,7 +33,7 @@ public class UserController {
     @Value("${user.profile.image.path}")
     private String uploadImagePath;
     //create
-    @PostMapping
+    @PostMapping("/create")
     @Operation(summary = "Create a User")
     ResponseEntity<UserDto> createUser(@Valid @RequestBody UserDto userDto){
         System.out.println(userDto);
