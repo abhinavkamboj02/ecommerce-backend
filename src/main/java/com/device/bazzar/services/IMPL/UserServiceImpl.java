@@ -7,6 +7,8 @@ import com.device.bazzar.exception.ResourceNotFoundException;
 import com.device.bazzar.helper.Helper;
 import com.device.bazzar.repositories.UserRepository;
 import com.device.bazzar.services.UserService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -38,6 +40,8 @@ public class UserServiceImpl implements UserService {
     @Value("${user.profile.image.path}")
     private String imagePath;
 
+
+
     @Override
     public UserDto createUser(UserDto userdto) {
         User user = modelMapper.map(userdto, User.class);
@@ -51,7 +55,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto updateUser(UserDto userDto, String userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("No user found"));
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("No user found with given User ID"));
         user.setUserName(userDto.getUserName());
         user.setUserAbout(userDto.getUserAbout());
         user.setUserGender(userDto.getUserGender());
@@ -105,8 +109,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDto> searchUsers(String keyword) {
+
         List<User> users = userRepository.findByuserNameContaining(keyword);
-        List<UserDto> usersDto = users.stream().map(user -> modelMapper.map(user, UserDto.class)).collect(Collectors.toList());
-        return usersDto;
+        if(users.isEmpty()){
+            throw new ResourceNotFoundException("No Users found with given keyword");
+        }else{
+            List<UserDto> usersDto = users.stream().map(user -> modelMapper.map(user, UserDto.class)).collect(Collectors.toList());
+            return usersDto;
+        }
+
+
+
+
+
+
     }
 }

@@ -1,9 +1,13 @@
 package com.device.bazzar.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
 @Getter
 @Setter
 @Builder
@@ -15,7 +19,7 @@ import java.util.Date;
 public class Product {
     @Id
     @Column(name = "Product_Id")
-    private String product_Id;
+    private String productId;
     @Column(name = "product_Tittle")
     private String tittle;
     @Column(name = "product_Desc", length = 10000)
@@ -38,4 +42,6 @@ public class Product {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_Id")
     private Category category;
+
+
 }

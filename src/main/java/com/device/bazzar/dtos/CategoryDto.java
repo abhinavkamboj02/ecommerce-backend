@@ -28,11 +28,4 @@ public class CategoryDto {
     @NotBlank(message = "description should not be blank")
     private String categoryDescription;
     private String coverImage;
-    //@JsonBackReference
-    //@JsonIgnore
-   // private List<ProductDto> listProductsDto = new ArrayList<>();
-
-
-
-
 }

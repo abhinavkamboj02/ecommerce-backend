@@ -86,6 +86,7 @@ public class UserController {
     @Operation(summary = "Get User by User Name")
     ResponseEntity<List<UserDto>> getUserByKeyword(@PathVariable String keyword){
         List<UserDto> allUser= userService.searchUsers(keyword);
+        System.out.println("list ka size h   "+allUser.size());
         return new ResponseEntity<>(allUser, HttpStatus.OK);
 
     }

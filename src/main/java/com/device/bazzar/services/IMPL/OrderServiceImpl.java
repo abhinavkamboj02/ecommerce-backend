@@ -31,21 +31,15 @@ public class OrderServiceImpl implements OrderService {
     ModelMapper modelMapper;
 
     @Override
-    public OrderDto createOrder(String userId, String cartId, OrderDto orderDto) {
+    public OrderDto createOrder(String userId, OrderDto orderDto) {
         User user = userRepository.findById(userId).orElseThrow(()-> new ResourceNotFoundException("No user Found with given Id"));
-        Cart cart = cartRepository.findById(cartId).orElseThrow(()-> new ResourceNotFoundException("No cart Found with given cart Id"));
+        Cart cart = cartRepository.findByUser(user).orElseThrow(()-> new ResourceNotFoundException("No cart Found with given cart Id"));
         List<CartItems> cartItemsList = cart.getItems();
         if(cartItemsList.size()<1){
             throw new BadApiRequest("invalid cart size");
         }
         AtomicInteger orderAmount = new AtomicInteger(0);
-        List<OrderItems> orderItemsList = cartItemsList.stream().map(cartItem -> {
-            OrderItems orderItems = OrderItems.builder()
-                    .product(cartItem.getProduct())
-                    .totalPrice(cartItem.getProduct().getDiscountedPrice()).build();
-            orderAmount.addAndGet(orderItems.getTotalPrice());
-            return orderItems;
-        }).collect(Collectors.toList());
+
 
         Order order = Order.builder()
                 .orderID(UUID.randomUUID().toString())
@@ -57,10 +51,22 @@ public class OrderServiceImpl implements OrderService {
                 .orderedDate(new Date())
                 .deliveredDate(orderDto.getDeliveredDate())
                 .user(user)
-                .orderItemsList(orderItemsList)
                 .amount(orderAmount.intValue())
                 .build();
 
+        List<OrderItems> orderItemsList = cartItemsList.stream().map(cartItem -> {
+            OrderItems orderItem = OrderItems.builder()
+                    .order(order)
+                    .product(cartItem.getProduct())
+                    .totalPrice(cartItem.getProduct().getDiscountedPrice()).build();
+            orderAmount.set(orderAmount.addAndGet(orderItem.getTotalPrice()));
+            return orderItem;
+        }).collect(Collectors.toList());
+        order.setOrderItemsList(orderItemsList);
+
+        cart.getItems().clear();
+        cartRepository.save(cart);
+        order.setAmount(orderAmount.intValue());
         Order savedOrder = orderRepository.save(order);
         OrderDto savedOrderDto = modelMapper.map(savedOrder, OrderDto.class);
         return savedOrderDto;

@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import java.util.Date;
+import java.util.Map;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -32,8 +33,10 @@ public class Order {
     private Date orderedDate;
     private Date deliveredDate;
     @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "userId")
     private User user;
-    @OneToMany(mappedBy = "order",fetch = FetchType.EAGER, cascade =CascadeType.ALL)
+    @OneToMany(mappedBy = "order", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<OrderItems> orderItemsList = new ArrayList<>();
+    
 
 }

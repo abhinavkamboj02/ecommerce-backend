@@ -5,7 +5,7 @@ import com.device.bazzar.entities.User;
 import java.util.List;
 public interface OrderService {
     //Create order
-    OrderDto createOrder(String userId, String cartId, OrderDto orderDto);
+    OrderDto createOrder(String userId, OrderDto orderDto);
     //remove order
     void deleteOrder(String orderId);
     //get order by user

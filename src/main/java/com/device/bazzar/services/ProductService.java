@@ -27,4 +27,6 @@ public interface ProductService {
     ProductDto createProductWithCategory(ProductDto productDto, String categoryId);
     ProductDto updateProductWithCategory(String productId, String categoryId);
     List<ProductDto> categoryWiseProducts(String categoryId);
+
+    ProductDto getByProductId(String productId);
 }

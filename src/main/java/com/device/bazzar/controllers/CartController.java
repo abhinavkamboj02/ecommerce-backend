@@ -25,19 +25,25 @@ public class CartController {
         CartDto cartDto = cartService.addItemToCart(userId, request);
         return new ResponseEntity<>(cartDto, CREATED);
     }
-    @PutMapping("/{userId}")
-    @Operation(summary = "update items in Cart")
-    ResponseEntity<CartDto> removeItemFromCart(@PathVariable String userId, @RequestBody AddItemToCartRequest request){
+    @DeleteMapping("/{userId}/{cartItemId}")
+    @Operation(summary = "remove items in Cart")
+    ResponseEntity<String> removeItemFromCart(@PathVariable String userId, @PathVariable int cartItemId){
 
-            CartDto cartDto = cartService.removeItemFromCart(userId, request);
-            return new ResponseEntity<>(cartDto, OK);
+            cartService.removeItemFromCart(userId, cartItemId);
+            return new ResponseEntity<>("Item Deleted", OK);
 
     }
     @DeleteMapping("/{userId}")
     @Operation(summary = "Remove all items from cart")
-    ResponseEntity<String> clearCart(String userId){
+    ResponseEntity<String> clearCart(@PathVariable String userId){
         cartService.clearCart(userId);
         return new ResponseEntity<>("Cart Cleared", OK);
+    }
+    @GetMapping("/{userId}")
+    @Operation(summary = "get cart of User")
+    ResponseEntity<CartDto> getUserCart(@PathVariable String userId){
+        CartDto cartDto = cartService.getUsercart(userId);
+        return new ResponseEntity<>(cartDto,OK);
     }
 
 

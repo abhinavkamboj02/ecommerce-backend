@@ -11,7 +11,7 @@ import java.util.Date;
 @ToString
 
 public class ProductDto {
-    private String product_Id;
+    private String productId;
     private String tittle;
     private String description;
     private int price;

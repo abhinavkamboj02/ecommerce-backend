@@ -4,6 +4,8 @@ import com.device.bazzar.entities.Cart;
 import com.device.bazzar.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Optional;
+
 public interface CartRepository extends JpaRepository<Cart, String> {
-    Cart findByUser(User user);
+    Optional<Cart> findByUser(User user);
 }

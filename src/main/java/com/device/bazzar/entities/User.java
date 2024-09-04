@@ -1,13 +1,10 @@
 package com.device.bazzar.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
+import java.util.List;
+import java.util.ArrayList;
 
-
-import java.util.Collection;
 
 @Getter
 @Setter
@@ -16,7 +13,7 @@ import java.util.Collection;
 @NoArgsConstructor
 @Entity
 @Table(name = "User_Table")
-public class User /* implements UserDetails*/{
+public class User {
     @Id
     @Column(name = "User_Id")
     private String userId;
@@ -33,6 +30,10 @@ public class User /* implements UserDetails*/{
     @Column(name = "User_ImageName")
     private String userImageName;
     private String userRole;
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private List<Order> orders = new ArrayList<>();
+    @OneToOne(mappedBy = "user",cascade = CascadeType.REMOVE)
+    private  Cart cart;
 
 //    @Override
 //    public Collection<? extends GrantedAuthority> getAuthorities() {

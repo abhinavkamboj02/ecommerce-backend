@@ -45,7 +45,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDto createProduct(ProductDto productDto) {
         Product product = modelMapper.map(productDto, Product.class);
-        product.setProduct_Id(UUID.randomUUID().toString());
+        product.setProductId(UUID.randomUUID().toString());
         Product productReturn = productRepository.save(product);
         ProductDto returnProductDto = modelMapper.map(productReturn, ProductDto.class);
         return returnProductDto;
@@ -116,25 +116,20 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDto createProductWithCategory(ProductDto productDto, String categoryId) {
-        //CategoryDto categoryDto = categoryService.getCategoryById(categoryId);
-       // Category category = modelMapper.map(categoryDto, Category.class);
-        Category category = categoryRepository.findById(categoryId).orElseThrow(()-> new ResourceNotFoundException());
+
+        Category category = categoryRepository.findById(categoryId).orElseThrow(()-> new ResourceNotFoundException("category is not found with given category ID"));
         Product product = modelMapper.map(productDto, Product.class);
-        product.setProduct_Id(UUID.randomUUID().toString());
+        product.setProductId(UUID.randomUUID().toString());
         product.setCategory(category);
         Product savedProduct = productRepository.save(product);
-        System.out.println(savedProduct.toString());
         ProductDto returnProductDto = modelMapper.map(savedProduct, ProductDto.class);
-//        returnProductDto.setCategoryDto(categoryDto);
-        System.out.println(returnProductDto.toString());
         return returnProductDto;
-       // return modelMapper.map(productReturn, ProductDto.class);
     }
 
     @Override
     public ProductDto updateProductWithCategory(String productId, String categoryId) {
-        Category category = categoryRepository.findById(categoryId).orElseThrow(()-> new ResourceNotFoundException());
-        Product product = productRepository.findById(productId).orElseThrow(()-> new ResourceNotFoundException());
+        Category category = categoryRepository.findById(categoryId).orElseThrow(()-> new ResourceNotFoundException("category is not found with given category ID"));
+        Product product = productRepository.findById(productId).orElseThrow(()-> new ResourceNotFoundException("No product found"));
         product.setCategory(category);
         Product savedProduct = productRepository.save(product);
         return modelMapper.map(savedProduct, ProductDto.class);
@@ -142,10 +137,18 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductDto> categoryWiseProducts(String categoryId) {
-        Category category = categoryRepository.findById(categoryId).orElseThrow(()-> new ResourceNotFoundException());
+        Category category = categoryRepository.findById(categoryId).orElseThrow(()-> new ResourceNotFoundException("Invalid category Id"));
         List<Product> productList = productRepository.findByCategory(category);
         List<ProductDto> returnProductDtoList = productList.stream().map(x -> modelMapper.map(x, ProductDto.class)).collect(Collectors.toList());
         return returnProductDtoList;
+    }
+
+    @Override
+    public ProductDto getByProductId(String productId) {
+
+        Product product = productRepository.findById(productId).orElseThrow(()-> new ResourceNotFoundException("Invalid product Id"));
+        return modelMapper.map(product, ProductDto.class);
+
     }
 
 }

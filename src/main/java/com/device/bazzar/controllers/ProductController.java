@@ -21,6 +21,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
+import static org.springframework.http.HttpStatus.OK;
+
 @RestController
 @RequestMapping("/product")
 @Tag(name = "Product Controller", description = "REST APIs for Product operations")
@@ -44,13 +46,13 @@ public class ProductController {
     @Operation(summary = "update Product")
     ResponseEntity<ProductDto> updateProduct(@RequestBody ProductDto productDto, @PathVariable String product_Id){
         ProductDto productDto1 = productService.updateProduct(productDto, product_Id);
-        return new ResponseEntity<>(productDto1, HttpStatus.OK);
+        return new ResponseEntity<>(productDto1, OK);
     }
-    @GetMapping("/{subTittle}")
+    @GetMapping("/search/{subTittle}")
     @Operation(summary = "get product by subtitle")
     ResponseEntity<List<ProductDto>> getByTittle(@PathVariable String subTittle){
         List<ProductDto> list = productService.getByTittle(subTittle);
-        return new ResponseEntity<>(list, HttpStatus.OK);
+        return new ResponseEntity<>(list, OK);
     }
     //get all
     @GetMapping
@@ -60,21 +62,21 @@ public class ProductController {
                                             @RequestParam(defaultValue = "tittle", required = false) String sortBy,
                                             @RequestParam(defaultValue = "tittle", required = false) String sortDir){
         PageableResponse resp = productService.getAllProduct(pageNumber, pageSize, sortBy, sortDir);
-        return new ResponseEntity<>(resp,HttpStatus.OK);
+        return new ResponseEntity<>(resp, OK);
     }
     //get islivetrue
     @GetMapping("/islive")
     @Operation(summary = "get all Live Products")
     ResponseEntity<List<ProductDto>> isLive(){
         List<ProductDto> list = productService.getByIsLiveTrue();
-        return new ResponseEntity<>(list, HttpStatus.OK);
+        return new ResponseEntity<>(list, OK);
     }
     //delete
     @DeleteMapping("/{product_Id}")
     @Operation(summary = "delete a Product")
     ResponseEntity<String> deleteProduct(@PathVariable String product_Id){
         productService.deleteProduct(product_Id);
-        return new ResponseEntity<>("Deleted Successfully!!", HttpStatus.OK);
+        return new ResponseEntity<>("Deleted Successfully!!", OK);
     }
 
     //upload image
@@ -100,7 +102,7 @@ public class ProductController {
         StreamUtils.copy(resource,response.getOutputStream());
     }
     @PostMapping("/category/{categoryId}")
-    @Operation(summary = "Get all product of a category")
+    @Operation(summary = "create product with category")
     ResponseEntity<ProductDto> createProductWithCategory(@RequestBody ProductDto productDto, @PathVariable  String categoryId){
         ProductDto productDto1 = productService.createProductWithCategory(productDto, categoryId);
         System.out.println(productDto1.toString());
@@ -110,14 +112,21 @@ public class ProductController {
     @Operation(summary = "Update category in Product")
     ResponseEntity<ProductDto> updateCategoryInProduct(@PathVariable String product_Id, @PathVariable String categoryId){
         ProductDto productDto = productService.updateProductWithCategory(product_Id, categoryId);
-        return new ResponseEntity<>(productDto, HttpStatus.OK);
+        return new ResponseEntity<>(productDto, OK);
     }
     @GetMapping("/category/{categoryId}")
     @Operation(summary = "Get producct by category")
     ResponseEntity<List<ProductDto>> productsWithGivenCategory(@PathVariable String categoryId){
         List<ProductDto> list = productService.categoryWiseProducts(categoryId);
-        return new ResponseEntity<>(list, HttpStatus.OK);
+        return new ResponseEntity<>(list, OK);
     }
+    @GetMapping("/{productId}")
+    @Operation(summary = "get product by productId")
+    ResponseEntity<ProductDto> getProductById(@PathVariable String productId){
+        ProductDto productDto = productService.getByProductId(productId);
+        return new ResponseEntity<>(productDto, OK);
+    }
+
 
 
 

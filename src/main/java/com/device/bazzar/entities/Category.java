@@ -1,5 +1,6 @@
 package com.device.bazzar.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,6 +26,7 @@ public class Category {
     private String categoryDescription;
     @Column(name = "ctegory_image")
     private String coverImage;
+
     @OneToMany(mappedBy = "category",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Product> listProducts = new ArrayList<>();
 

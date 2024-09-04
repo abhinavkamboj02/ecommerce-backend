@@ -17,8 +17,8 @@ public class OrderController {
     private OrderService orderService;
     @PostMapping("/{userId}/{cartId}")
     @Operation(summary = "create order")
-    ResponseEntity<OrderDto> createOrder(@PathVariable String userId, @PathVariable String cartId, @RequestBody OrderDto orderDto){
-        OrderDto orderDto1 = orderService.createOrder(userId, cartId, orderDto);
+    ResponseEntity<OrderDto> createOrder(@PathVariable String userId,  @RequestBody OrderDto orderDto){
+        OrderDto orderDto1 = orderService.createOrder(userId, orderDto);
         return new ResponseEntity<>(orderDto1, HttpStatus.CREATED);
     }
     @DeleteMapping("/{orderId}")
@@ -27,7 +27,7 @@ public class OrderController {
         orderService.deleteOrder(orderId);
         return  new ResponseEntity<>("successfuly deleted", HttpStatus.OK);
     }
-    @GetMapping("/user/{userId}")
+    @GetMapping("/users/{userId}")
     @Operation(summary = "get order by User")
     ResponseEntity<List<OrderDto>> getByuser(@PathVariable String userId){
         List<OrderDto> orderDtoList = orderService.getByUser(userId);

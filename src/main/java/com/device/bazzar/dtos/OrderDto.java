@@ -31,6 +31,6 @@ public class OrderDto {
     private String name;
     private Date orderedDate;
     private Date deliveredDate;
-    private User user;
+    private UserDto user;
     private List<OrderItemsDto> orderItemsList = new ArrayList<>();
 }
