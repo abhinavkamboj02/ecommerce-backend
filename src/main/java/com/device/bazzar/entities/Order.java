@@ -22,6 +22,7 @@ import java.util.Map;
 public class Order {
     @Id
     private String orderID;
+
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
     @Enumerated(EnumType.STRING)
@@ -32,9 +33,11 @@ public class Order {
     private String name;
     private Date orderedDate;
     private Date deliveredDate;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "userId")
     private User user;
+
     @OneToMany(mappedBy = "order", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<OrderItems> orderItemsList = new ArrayList<>();
     

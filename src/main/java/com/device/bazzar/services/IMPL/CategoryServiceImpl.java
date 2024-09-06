@@ -66,14 +66,12 @@ public class CategoryServiceImpl implements CategoryService {
             throw new RuntimeException(e);
         }
     }
-
     @Override
     public CategoryDto getCategoryById(String categoryId) {
         Category category = categoryRepository.findById(categoryId).orElseThrow(()-> new ResourceNotFoundException("No category found with given ID"));
         CategoryDto categoryDto = modelMapper.map(category, CategoryDto.class);
         return categoryDto;
     }
-
     @Override
     public PageableResponse<CategoryDto> getAllCategory(int pageNumber, int pageSize, String sortBy, String sortDir) {
         Sort sort = sortDir.equalsIgnoreCase("desc")?(Sort.by(sortBy).descending()) : (Sort.by(sortBy).ascending());

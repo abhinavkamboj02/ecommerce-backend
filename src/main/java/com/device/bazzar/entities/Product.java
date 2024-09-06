@@ -17,9 +17,11 @@ import java.util.List;
 @Entity
 @Table(name = "products")
 public class Product {
+
     @Id
     @Column(name = "Product_Id")
     private String productId;
+
     @Column(name = "product_Tittle")
     private String tittle;
     @Column(name = "product_Desc", length = 10000)

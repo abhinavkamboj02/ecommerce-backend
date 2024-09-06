@@ -14,9 +14,11 @@ public class OrderItems {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int orderItemId;
     private int totalPrice;
+
     @ManyToOne
     @JoinColumn(name = "ProductId")
     private Product product;
+
     @ManyToOne
     @JoinColumn(name = "orderId")
     private Order order;

@@ -25,4 +25,5 @@ public class UserDto {
     @NotBlank(message = "Please enter About")
     private String userAbout;
     private String userImageName;
+
 }

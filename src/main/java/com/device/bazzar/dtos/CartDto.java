@@ -16,9 +16,10 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CartDto {
+
     private String cartId;
     private Date cartedAt;
-
     private UserDto user;
     private List<CartItemsDto> items =  new ArrayList<>();
+
 }

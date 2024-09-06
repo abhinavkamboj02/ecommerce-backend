@@ -9,6 +9,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class PageableResponse<T> {
+
     private List<T> content;
     private int pageNumber;
     private int pageSize;

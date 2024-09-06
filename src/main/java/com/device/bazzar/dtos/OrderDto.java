@@ -21,9 +21,7 @@ import java.util.List;
 public class OrderDto {
 
     private String orderID;
-
     private OrderStatus orderStatus;
-
     private PaymentStatus paymentStatus;
     private int amount;
     private String billingAddress;

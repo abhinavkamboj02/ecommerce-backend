@@ -20,7 +20,6 @@ import java.util.List;
 @NoArgsConstructor
 public class CategoryDto {
 
-
     private String categoryId;
     @NotBlank
     @Size(min = 4, message = "tittle should be minimum of length 4 characters")
@@ -28,4 +27,5 @@ public class CategoryDto {
     @NotBlank(message = "description should not be blank")
     private String categoryDescription;
     private String coverImage;
+
 }

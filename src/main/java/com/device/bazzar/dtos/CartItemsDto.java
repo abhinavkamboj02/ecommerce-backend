@@ -11,11 +11,10 @@ import lombok.Setter;
 @NoArgsConstructor
 
 public class CartItemsDto {
+
     private int cartItemId;
     private int quantity;
     private int totalAmount;
-
     private ProductDto product;
 
-   // private CartDto cart;
 }

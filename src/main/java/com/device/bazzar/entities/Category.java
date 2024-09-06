@@ -20,6 +20,7 @@ public class Category {
     @Id
     @Column(name = "category_Id")
     private String categoryId;
+
     @Column(name = "category_tittle")
     private String categoryTittle;
     @Column(name = "category_description")

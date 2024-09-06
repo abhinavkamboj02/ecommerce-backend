@@ -16,7 +16,9 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderItemsDto {
+
     private int orderItemId;
     private int totalPrice;
     private ProductDto product;
+
 }

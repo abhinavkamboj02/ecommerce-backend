@@ -8,8 +8,10 @@ import org.springframework.http.HttpStatus;
 @Builder
 
 public class ImageResponse {
+
     private String imageName;
     private String message;
     private boolean success;
     private HttpStatus status;
+
 }

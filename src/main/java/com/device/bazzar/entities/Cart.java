@@ -12,9 +12,11 @@ import java.util.*;
 @Builder
 @Entity
 public class Cart {
+
     @Id
     private String cartId;
     private Date cartedAt;
+
     @OneToOne
     @JoinColumn(name = "userId")
     private User user;

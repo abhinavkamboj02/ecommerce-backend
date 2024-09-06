@@ -117,11 +117,5 @@ public class UserServiceImpl implements UserService {
             List<UserDto> usersDto = users.stream().map(user -> modelMapper.map(user, UserDto.class)).collect(Collectors.toList());
             return usersDto;
         }
-
-
-
-
-
-
     }
 }

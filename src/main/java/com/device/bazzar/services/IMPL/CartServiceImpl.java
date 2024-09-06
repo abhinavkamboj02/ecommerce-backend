@@ -88,9 +88,6 @@ public class CartServiceImpl implements CartService {
         CartItems cartItem1 = cartItemRepository.findById(cartItemId).orElseThrow(() -> new ResourceNotFoundException("Cart Item not found !!"));
         cartItemRepository.delete(cartItem1);
     }
-
-
-
     @Override
     public void clearCart(String userId) {
         User user =userRepository.findById(userId).orElseThrow(()-> new ResourceNotFoundException("No User Found with given Id"));
@@ -99,7 +96,6 @@ public class CartServiceImpl implements CartService {
         cartRepository.save(cart);
 
     }
-
     @Override
     public CartDto getUsercart(String UserId) {
         User user = userRepository.findById(UserId).orElseThrow(()-> new ResourceNotFoundException("No user found with given Id"));

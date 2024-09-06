@@ -13,7 +13,6 @@ import java.util.UUID;
 
 @Service
 public class FileServiceImpl implements FileService {
-    private Logger logger;
 
     @Override
     public String uploadfile(MultipartFile file, String path) throws IOException {
